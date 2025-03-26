@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarWash Connect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            scroll-behavior: smooth;
+        }
+        .map-container { 
+            height: 300px; 
+            background: #e2e8f0;
+            background-image: url('https://images.unsplash.com/photo-1594284814529-9649430c6319?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white p-4 fixed w-full top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">CarWash Connect</h1>
+            <nav class="flex items-center space-x-4">
+                <button id="navUser" class="text-white hover:text-blue-200 px-2">User</button>
+                <button id="navProvider" class="text-white hover:text-blue-200 px-2">Service Provider</button>
+                <button id="loginBtn" class="bg-white text-blue-600 px-4 py-2 rounded-full font-medium hover:bg-blue-50 transition">Login</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto pt-24 p-4 pb-12">
+        <!-- Page Indicator -->
+        <div class="mb-4 flex justify-center">
+            <div class="inline-flex rounded-md shadow-sm" role="group">
+                <button id="userTabBtn" class="px-5 py-2 text-sm font-medium bg-blue-600 text-white rounded-l-lg border border-blue-600 hover:bg-blue-700 focus:z-10 focus:bg-blue-700">
+                    For Users
+                </button>
+                <button id="providerTabBtn" class="px-5 py-2 text-sm font-medium bg-white text-blue-600 rounded-r-lg border border-blue-600 hover:bg-gray-100 focus:z-10 focus:bg-gray-100">
+                    For Service Providers
+                </button>
+            </div>
+        </div>
+
+        <!-- User Page -->
+        <div id="userPage">
+            <!-- User Section -->
+            <section id="userSection" class="mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h2 class="text-2xl font-bold mb-4">Find Nearby Car Wash Centers</h2>
+                    <div class="space-y-4">
+                        <div class="flex space-x-2">
+                            <input type="text" placeholder="Enter your location" class="w-full p-3 border rounded-lg" id="locationInput">
+                            <button class="bg-blue-600 px-4 text-white rounded-lg">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </button>
+                        </div>
+                        <div class="map-container rounded-lg flex items-center justify-center">
+                            <div class="bg-white bg-opacity-80 p-4 rounded-lg">
+                                <p class="text-gray-800">Map view will appear here with nearby car wash centers</p>
+                            </div>
+                        </div>
+                        <button id="findWashCenters" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition flex items-center justify-center">
+                            <i class="bi bi-search mr-2"></i> Find Car Wash Centers
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Available Services Section -->
+            <section id="servicesSection" class="mt-8 bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-4">Available Services</h2>
+                <div class="space-y-4">
+                    <!-- Filter options -->
+                    <div class="flex flex-wrap gap-2">
+                        <button class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm hover:bg-blue-200">
+                            <i class="bi bi-sort-down mr-1"></i> Sort by Rating
+                        </button>
+                        <button class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm hover:bg-blue-200">
+                            <i class="bi bi-cash-coin mr-1"></i> Sort by Price
+                        </button>
+                        <button class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm hover:bg-blue-200">
+                            <i class="bi bi-geo mr-1"></i> Nearest First
+                        </button>
+                    </div>
+
+                    <!-- Services list -->
+                    <div class="space-y-4 mt-4">
+                        <!-- Service Card 1 -->
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="flex flex-col md:flex-row">
+                                <div class="w-full md:w-1/4 bg-gray-200 h-40 md:h-auto">
+                                    <img src="https://images.unsplash.com/photo-1605164599901-7e001641c691?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Car Wash Service" class="w-full h-full object-cover">
+                                </div>
+                                <div class="w-full md:w-3/4 p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h3 class="text-xl font-bold">Shine & Drive Car Wash</h3>
+                                            <p class="text-gray-600"><i class="bi bi-geo-alt text-blue-600"></i> 2.3 km away</p>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-half"></i>
+                                                </div>
+                                                <span class="ml-1 text-gray-600">(128 reviews)</span>
+                                            </div>
+                                        </div>
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Open</span>
+                                    </div>
+                                    <div class="mt-3 space-y-1">
+                                        <p><i class="bi bi-check-circle text-green-600"></i> Full Service Car Wash</p>
+                                        <p><i class="bi bi-check-circle text-green-600"></i> Interior Cleaning</p>
+                                        <p><i class="bi bi-check-circle text-green-600"></i> Exterior Waxing</p>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-4">
+                                        <div class="font-semibold">Starting from ₹399</div>
+                                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Book Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service Card 2 -->
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="flex flex-col md:flex-row">
+                                <div class="w-full md:w-1/4 bg-gray-200 h-40 md:h-auto">
+                                    <img src="https://images.unsplash.com/photo-1562199582-c2a5cfbeca5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Car Wash Service" class="w-full h-full object-cover">
+                                </div>
+                                <div class="w-full md:w-3/4 p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h3 class="text-xl font-bold">Express Auto Spa</h3>
+                                            <p class="text-gray-600"><i class="bi bi-geo-alt text-blue-600"></i> 3.5 km away</p>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star"></i>
+                                                </div>
+                                                <span class="ml-1 text-gray-600">(95 reviews)</span>
+                                            </div>
+                                        </div>
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Open</span>
+                                    </div>
+                                    <div class="mt-3 space-y-1">
+                                        <p><i class="bi bi-check-circle text-green-600"></i> Express Cleaning</p>
+                                        <p><i class="bi bi-check-circle text-green-600"></i> Steam Wash</p>
+                                        <p><i class="bi bi-check-circle text-green-600"></i> Underbody Wash</p>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-4">
+                                        <div class="font-semibold">Starting from ₹299</div>
+                                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Book Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service Card 3 -->
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="flex flex-col md:flex-row">
+                                <div class="w-full md:w-1/4 bg-gray-200 h-40 md:h-auto">
+                                    <img src="https://images.unsplash.com/photo-1552353617-3bfd679b3bdd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Car Wash Service" class="w-full h-full object-cover">
+                                </div>
+                                <div class="w-full md:w-3/4 p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h3 class="text-xl font-bold">Prime Auto Care</h3>
+                                            <p class="text-gray-600"><i class="bi bi-geo-alt text-blue-600"></i> 4.7 km away</p>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                </div>
+                                                <span class="ml-1 text-gray-600">(210 reviews)</span>
+                                            </div>
+                                        </div>
+                                        <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-sm">Closed</span>
+                                    </div>
+                                    <div class="mt-3 space-y-1">
+                                        <p><i class="bi bi-check-circle text-green-600"></i> Premium Detailing</p>
+                                        <p><i class="bi bi-check-circle text-green-600"></i> Paint Protection</p>
+                                        <p><i class="bi bi-check-circle text-green-600"></i> Interior Sanitization</p>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-4">
+                                        <div class="font-semibold">Starting from ₹599</div>
+                                        <button class="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed">Closed Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="mt-8 grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <i class="bi bi-geo-alt text-3xl text-blue-600"></i>
+                    <h3 class="text-xl font-bold mt-4">Location Based</h3>
+                    <p class="text-gray-600 mt-2">Find the nearest car wash centers in your area</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <i class="bi bi-bell text-3xl text-blue-600"></i>
+                    <h3 class="text-xl font-bold mt-4">Real-time Notifications</h3>
+                    <p class="text-gray-600 mt-2">Get instant updates on your booking status</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <i class="bi bi-star text-3xl text-blue-600"></i>
+                    <h3 class="text-xl font-bold mt-4">Quality Service</h3>
+                    <p class="text-gray-600 mt-2">Verified service providers at your service</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Provider Page -->
+        <div id="providerPage" class="hidden">
+            <!-- Service Provider Section -->
+            <section id="providerSection" class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-4">Register as Service Provider</h2>
+                <form id="providerForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Business Name*</label>
+                            <input type="text" class="w-full p-3 border rounded-lg" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Owner Name*</label>
+                            <input type="text" class="w-full p-3 border rounded-lg" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2">Business Address*</label>
+                        <textarea class="w-full p-3 border rounded-lg" rows="2" required></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Contact Number*</label>
+                            <input type="tel" class="w-full p-3 border rounded-lg" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Email Address*</label>
+                            <input type="email" class="w-full p-3 border rounded-lg" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2">Business Hours</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-600">Opening Time</label>
+                                <input type="time" class="w-full p-3 border rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600">Closing Time</label>
+                                <input type="time" class="w-full p-3 border rounded-lg">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2">Available Services (Select all applicable)</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600">
+                                <span>Express Wash</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600">
+                                <span>Full Service Wash</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600">
+                                <span>Interior Cleaning</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600">
+                                <span>Exterior Detailing</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600">
+                                <span>Waxing</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600">
+                                <span>Steam Cleaning</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2">Business Description</label>
+                        <textarea class="w-full p-3 border rounded-lg" rows="3" placeholder="Describe your car wash business, specialties, and any unique services offered..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2">Upload Business Photos</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label class="flex flex-col w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <div class="flex flex-col items-center justify-center pt-7">
+                                    <i class="bi bi-cloud-arrow-up text-2xl text-gray-400"></i>
+                                    <p class="pt-1 text-sm text-gray-500">Upload images of your car wash center</p>
+                                </div>
+                                <input type="file" class="hidden" multiple accept="image/*">
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg text-blue-800">Registration Fee Details</h3>
+                        <p class="text-blue-700 mb-2">One-time registration fee to join CarWash Connect network</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-blue-700">Registration Fee</p>
+                                <p class="text-2xl font-bold text-blue-800">₹1,000</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-blue-700">Service Fee per Order</p>
+                                <p class="text-lg font-bold text-blue-800">₹25</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600" required>
+                        <span class="text-sm text-gray-700">I agree to the <a href="#" class="text-blue-600 hover:underline">Terms & Conditions</a> and <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a></span>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition flex items-center justify-center">
+                        <i class="bi bi-shop mr-2"></i> Register My Car Wash Business
+                    </button>
+                </form>
+            </section>
+
+            <!-- Benefits Section -->
+            <section class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-4">Benefits of Joining CarWash Connect</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="flex space-x-4">
+                        <div class="text-blue-600 text-3xl">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold">Increased Visibility</h3>
+                            <p class="text-gray-600">Get discovered by thousands of vehicle owners in your area looking for car wash services.</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <div class="text-blue-600 text-3xl">
+                            <i class="bi bi-phone"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold">Digital Presence</h3>
+                            <p class="text-gray-600">Create your digital storefront with no technical expertise required.</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <div class="text-blue-600 text-3xl">
+                            <i class="bi bi-megaphone"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold">Zero Marketing Cost</h3>
+                            <p class="text-gray-600">No need to spend on advertising. We bring customers directly to you.</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <div class="text-blue-600 text-3xl">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold">Increased Revenue</h3>
+                            <p class="text-gray-600">Our partners report an average 30% increase in business after joining.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold mb-4">What Our Partners Say</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex text-yellow-400 mb-3">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-gray-600 italic">"Joining CarWash Connect was the best decision for my business. I've seen a 40% increase in customers within just 2 months!"</p>
+                        <div class="mt-4">
+                            <p class="font-bold">Rajesh Kumar</p>
+                            <p class="text-sm text-gray-600">Shine & Drive, Mumbai</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex text-yellow-400 mb-3">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-gray-600 italic">"The platform is so easy to use. I receive notifications for new orders and can manage my business right from my phone."</p>
+                        <div class="mt-4">
+                            <p class="font-bold">Anjali Singh</p>
+                            <p class="text-sm text-gray-600">Express Auto Spa, Delhi</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex text-yellow-400 mb-3">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                        </div>
+                        <p class="text-gray-600 italic">"The registration fee is nothing compared to the value we've received. Our weekend slots are now always fully booked!"</p>
+                        <div class="mt-4">
+                            <p class="font-bold">Vikram Mehta</p>
+                            <p class="text-sm text-gray-600">Prime Auto Care, Bangalore</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">CarWash Connect</h3>
+                    <p class="text-gray-400">Connecting car owners with quality car wash services across India.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-white hover:text-blue-400"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white hover:text-blue-400"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white hover:text-blue-400"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white hover:text-blue-400"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">For Users</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">How it Works</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Find Services</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">For Providers</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Join as Partner</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Partner Benefits</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Success Stories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Partner Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center"><i class="bi bi-geo-alt mr-2 text-blue-400"></i><span class="text-gray-400">123 Business Park, Mumbai, India</span></li>
+                        <li class="flex items-center"><i class="bi bi-telephone mr-2 text-blue-400"></i><span class="text-gray-400">+91 9876543210</span></li>
+                        <li class="flex items-center"><i class="bi bi-envelope mr-2 text-blue-400"></i><span class="text-gray-400">info@carwashconnect.com</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400">© 2023 CarWash Connect. All rights reserved.</p>
+                <div class="mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white mx-2">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white mx-2">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal (hidden by default) -->
+    <div id="loginModal" class="hidden fixed inset-0 z-50 overflow-auto bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="flex justify-between items-center border-b p-4">
+                <h3 class="text-xl font-bold">Login to CarWash Connect</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="mb-6">
+                    <div class="flex justify-center space-x-4">
+                        <button class="w-1/2 py-2 border rounded-l-lg border-blue-600 bg-blue-600 text-white">User</button>
+                        <button class="w-1/2 py-2 border rounded-r-lg border-blue-600 text-blue-600">Service Provider</button>
+                    </div>
+                </div>
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Email or Phone</label>
+                        <input type="text" class="w-full p-3 border rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Password</label>
+                        <input type="password" class="w-full p-3 border rounded-lg" required>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="mr-2">
+                            <span class="text-sm">Remember me</span>
+                        </label>
+                        <a href="#" class="text-blue-600 text-sm hover:underline">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition">
+                        Login
+                    </button>
+                </form>
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600">Don't have an account? <a href="#" class="text-blue-600 hover:underline">Sign up</a></p>
+                </div>
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center">
+                            <span class="bg-white px-4 text-sm text-gray-500">Or login with</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+                        <button class="flex justify-center items-center py-2 border rounded-lg hover:bg-gray-50">
+                            <i class="bi bi-google text-red-600"></i>
+                        </button>
+                        <button class="flex justify-center items-center py-2 border rounded-lg hover:bg-gray-50">
+                            <i class="bi bi-facebook text-blue-600"></i>
+                        </button>
+                        <button class="flex justify-center items-center py-2 border rounded-lg hover:bg-gray-50">
+                            <i class="bi bi-phone text-green-600"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const userPage = document.getElementById('userPage');
+        const providerPage = document.getElementById('providerPage');
+        const userTabBtn = document.getElementById('userTabBtn');
+        const providerTabBtn = document.getElementById('providerTabBtn');
+        const navUser = document.getElementById('navUser');
+        const navProvider = document.getElementById('navProvider');
+
+        function showUserPage() {
+            userPage.classList.remove('hidden');
+            providerPage.classList.add('hidden');
+            userTabBtn.classList.add('bg-blue-600', 'text-white');
+            userTabBtn.classList.remove('bg-white', 'text-blue-600');
+            providerTabBtn.classList.add('bg-white', 'text-blue-600');
+            providerTabBtn.classList.remove('bg-blue-600', 'text-white');
+        }
+
+        function showProviderPage() {
+            userPage.classList.add('hidden');
+            providerPage.classList.remove('hidden');
+            providerTabBtn.classList.add('bg-blue-600', 'text-white');
+            providerTabBtn.classList.remove('bg-white', 'text-blue-600');
+            userTabBtn.classList.add('bg-white', 'text-blue-600');
+            userTabBtn.classList.remove('bg-blue-600', 'text-white');
+        }
+
+        userTabBtn.addEventListener('click', showUserPage);
+        providerTabBtn.addEventListener('click', showProviderPage);
+        navUser.addEventListener('click', showUserPage);
+        navProvider.addEventListener('click', showProviderPage);
+
+        // Login modal functionality
+        const loginBtn = document.getElementById('loginBtn');
+        const loginModal = document.getElementById('loginModal');
+        const closeModal = document.getElementById('closeModal');
+
+        loginBtn.addEventListener('click', function() {
+            loginModal.classList.remove('hidden');
+        });
+
+        closeModal.addEventListener('click', function() {
+            loginModal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === loginModal) {
+                loginModal.classList.add('hidden');
+            }
+        });
+
+        // Simulate location search
+        document.getElementById('findWashCenters').addEventListener('click', function() {
+            const location = document.getElementById('locationInput').value;
+            if (location) {
+                alert('Searching for car wash centers near: ' + location);
+                // Here you would typically make an API call to find nearby centers
+            } else {
+                alert('Please enter your location');
+            }
+        });
+
+        // Provider registration
+        document.getElementById('providerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Registration submitted! Please complete the payment of ₹1,000 to activate your account. You will be redirected to the payment page.');
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
